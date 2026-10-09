@@ -1,0 +1,77 @@
+:root {
+  --bg: #0c0e12;
+  --panel: #14171d;
+  --text: #d8dce4;
+  --dim: #7b8290;
+  --accent: #f97316;
+  --edge: #232833;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.5 "SF Mono", "Cascadia Code", Consolas, monospace;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+header { text-align: center; padding: 18px 16px 6px; }
+header h1 { margin: 0 0 4px; font-size: 20px; letter-spacing: 1px; }
+header p { margin: 0; color: var(--dim); font-size: 12px; }
+
+main { width: min(960px, 96vw); padding-bottom: 32px; }
+
+#view {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  cursor: crosshair;
+  touch-action: none;
+  image-rendering: auto;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 18px;
+}
+
+.group { display: flex; flex-direction: column; gap: 8px; }
+.label { color: var(--accent); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+
+#presets { display: flex; flex-wrap: wrap; gap: 6px; }
+#presets button {
+  background: #1b202a; color: var(--text);
+  border: 1px solid var(--edge); border-radius: 4px;
+  padding: 4px 10px; font: inherit; font-size: 12px; cursor: pointer;
+}
+#presets button:hover { border-color: var(--accent); }
+
+label { display: flex; flex-direction: column; gap: 2px; color: var(--dim); font-size: 12px; }
+output { color: var(--text); float: right; }
+input[type="range"] { accent-color: var(--accent); width: 100%; }
+
+.actions { flex-direction: row; flex-wrap: wrap; gap: 8px; align-items: flex-end; }
+.actions button {
+  background: #1b202a; color: var(--text);
+  border: 1px solid var(--edge); border-radius: 4px;
+  padding: 6px 12px; font: inherit; cursor: pointer;
+}
+.actions button:hover { border-color: var(--accent); }
+
+.hints ul { margin: 0; padding-left: 16px; color: var(--dim); font-size: 12px; }
+
+@media (max-width: 640px) {
+  .panel { grid-template-columns: 1fr; }
+}

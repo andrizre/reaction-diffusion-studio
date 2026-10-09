@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reaction-Diffusion Studio — Gray-Scott Pattern Lab</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Reaction-Diffusion Studio</h1>
+  <p>Gray-Scott reaction–diffusion simulated on the GPU. Paint seeds with the mouse, tune the reaction, capture the result.</p>
+</header>
+
+<main>
+  <canvas id="view" width="960" height="600"></canvas>
+
+  <section class="panel">
+    <div class="group presets">
+      <span class="label">Presets</span>
+      <div id="presets"></div>
+    </div>
+
+    <div class="group sliders">
+      <label>Feed (F) <output id="fOut">0.037</output>
+        <input type="range" id="f" min="0.005" max="0.110" step="0.001" value="0.037">
+      </label>
+      <label>Kill (k) <output id="kOut">0.060</output>
+        <input type="range" id="k" min="0.030" max="0.075" step="0.0005" value="0.060">
+      </label>
+      <label>Iterations / frame <output id="iterOut">12</output>
+        <input type="range" id="iters" min="1" max="60" step="1" value="12">
+      </label>
+      <label>Palette <output id="palOut"></output>
+        <input type="range" id="pal" min="0" max="5" step="1" value="0">
+      </label>
+    </div>
+
+    <div class="group actions">
+      <button id="brush">Brush: seed</button>
+      <button id="clear">Clear</button>
+      <button id="randomize">Scatter seeds</button>
+      <button id="pause">Pause</button>
+      <button id="save">Save PNG</button>
+    </div>
+
+    <div class="group hints">
+      <span class="label">Controls</span>
+      <ul>
+        <li>Drag on the canvas to paint</li>
+        <li>Space: pause · C: clear · R: scatter seeds · S: save PNG</li>
+        <li>The F/k space map shows where the current parameters sit</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<script src="main.js"></script>
+</body>
+</html>
