@@ -346,6 +346,53 @@ canvas.addEventListener("pointerdown", e => { painting = true; paintFromEvent(e)
 canvas.addEventListener("pointermove", e => { if (painting) paintFromEvent(e); });
 window.addEventListener("pointerup", () => { painting = false; });
 
+// ------------------------------------------------------- F/k regime map
+// A computed Gray-Scott regime map (fk-map.js): each cell runs a tiny CPU sim
+// with that cell's (F, k) and is classified by the surviving pattern.
+const fkCanvas = $("fkmap");
+const MAP_W = 55, MAP_H = 35;
+let fkImageData = null;
+if (window.FkMap) {
+  const map = window.FkMap.computeMap(MAP_W, MAP_H, { cell: 14, iters: 300 });
+  const off = document.createElement("canvas");
+  off.width = MAP_W; off.height = MAP_H;
+  off.getContext("2d").putImageData(new ImageData(map.colors, MAP_W, MAP_H), 0, 0);
+  fkImageData = off;
+}
+
+function drawFkMarker() {
+  if (!fkImageData || !window.FkMap) return;
+  const ctx = fkCanvas.getContext("2d");
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(fkImageData, 0, 0, fkCanvas.width, fkCanvas.height);
+  const p = window.FkMap.toMapCoords(params.f, params.k);
+  const mx = p.x * fkCanvas.width, my = (1 - p.y) * fkCanvas.height;
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(mx, my, 5, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.strokeStyle = "#000000";
+  ctx.beginPath();
+  ctx.arc(mx, my, 7, 0, Math.PI * 2);
+  ctx.stroke();
+}
+
+if (fkCanvas && window.FkMap) {
+  drawFkMarker();
+  fkCanvas.addEventListener("click", e => {
+    const r = fkCanvas.getBoundingClientRect();
+    const x = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+    const y = Math.min(1, Math.max(0, 1 - (e.clientY - r.top) / r.height));
+    const p = window.FkMap.toParams(x, y);
+    params.f = p.f; params.k = p.k;
+    $("f").value = p.f; $("k").value = p.k;
+    $("fOut").textContent = p.f.toFixed(3);
+    $("kOut").textContent = p.k.toFixed(4);
+    drawFkMarker();
+  });
+}
+
 // ------------------------------------------------------------------ loop
 
 function frame() {

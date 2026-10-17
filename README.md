@@ -31,6 +31,8 @@ python3 -m http.server 8000
 - `index.html` — page structure and controls
 - `style.css` — dark studio styling
 - `main.js` — WebGL setup, GLSL shaders (step / splat / draw), UI wiring, animation loop
+- `fk-map.js` — computed Gray-Scott F/k regime map (pure JS, also runs in Node)
+- `test-fk-map.js` — tests for the regime map (`node test-fk-map.js`)
 
 ## Tech
 

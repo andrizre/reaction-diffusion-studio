@@ -72,6 +72,19 @@ input[type="range"] { accent-color: var(--accent); width: 100%; }
 
 .hints ul { margin: 0; padding-left: 16px; color: var(--dim); font-size: 12px; }
 
+#fkmap {
+  display: block;
+  border: 1px solid var(--edge);
+  border-radius: 4px;
+  width: 100%;
+  max-width: 220px;
+  cursor: pointer;
+  image-rendering: pixelated;
+}
+.fkmap-legend { display: flex; flex-wrap: wrap; gap: 8px; color: var(--dim); font-size: 10px; }
+.fkmap-legend span { display: inline-flex; align-items: center; gap: 4px; }
+.fkmap-legend i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+
 @media (max-width: 640px) {
   .panel { grid-template-columns: 1fr; }
 }

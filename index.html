@@ -16,6 +16,18 @@
   <canvas id="view" width="960" height="600"></canvas>
 
   <section class="panel">
+    <div class="group fkmap">
+      <span class="label">F/k regime map</span>
+      <canvas id="fkmap" width="220" height="140" title="Computed Gray-Scott regime map. Click to jump to a (F, k) point."></canvas>
+      <div class="fkmap-legend">
+        <span><i style="background:#100e14"></i>dead</span>
+        <span><i style="background:#5a5664"></i>uniform</span>
+        <span><i style="background:#2e60c8"></i>holes</span>
+        <span><i style="background:#eb7828"></i>worms</span>
+        <span><i style="background:#f5c83c"></i>solitons</span>
+      </div>
+    </div>
+
     <div class="group presets">
       <span class="label">Presets</span>
       <div id="presets"></div>
@@ -49,12 +61,13 @@
       <ul>
         <li>Drag on the canvas to paint</li>
         <li>Space: pause · C: clear · R: scatter seeds · S: save PNG</li>
-        <li>The F/k space map shows where the current parameters sit</li>
+        <li>The F/k regime map (left) is a real computed Gray-Scott phase map — click it to jump to that (F, k)</li>
       </ul>
     </div>
   </section>
 </main>
 
+<script src="fk-map.js"></script>
 <script src="main.js"></script>
 </body>
 </html>
