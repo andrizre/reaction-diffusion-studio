@@ -286,11 +286,56 @@ function bindSlider(id, outId, key, fmt, after) {
   });
   return el;
 }
-bindSlider("f", "fOut", "f", v => v.toFixed(3));
-bindSlider("k", "kOut", "k", v => v.toFixed(4));
-bindSlider("iters", "iterOut", "iters", v => String(v));
-const palSlider = bindSlider("pal", "palOut", "palette",
-  v => ["ember","ice","acid","mono","magma","neon"][v], null);
+bindSlider("f", "fOut", "f", v => v.toFixed(3), syncUI);
+bindSlider("k", "kOut", "k", v => v.toFixed(4), syncUI);
+bindSlider("iters", "iterOut", "iters", v => String(v), syncUI);
+bindSlider("pal", "palOut", "palette",
+  v => ["ember","ice","acid","mono","magma","neon"][v], syncUI);
+
+// Keep every control, readout and the F/k map marker in sync with `params`.
+function syncUI() {
+  $("f").value = params.f;   $("fOut").textContent = params.f.toFixed(3);
+  $("k").value = params.k;   $("kOut").textContent = params.k.toFixed(4);
+  $("iters").value = params.iters; $("iterOut").textContent = String(params.iters);
+  $("pal").value = params.palette;
+  $("palOut").textContent = ["ember","ice","acid","mono","magma","neon"][params.palette];
+  drawFkMarker();
+}
+
+// -------------------------------------------------------- share-link (hash)
+// URL hash encodes F, k, iterations and palette: #g<f>:k<k>:i<n>:p<p>
+// Example: #g0.037:k0.0600:i12:p0
+function encodeState() {
+  return `#g${params.f.toFixed(4)}:k${params.k.toFixed(5)}:i${params.iters}:p${params.palette}`;
+}
+function decodeState(hash) {
+  const m = /^#g([\d.]+):k([\d.]+):i(\d+):p(\d+)$/.exec(hash || "");
+  if (!m) return null;
+  const f = parseFloat(m[1]), k = parseFloat(m[2]);
+  const iters = parseInt(m[3], 10), palette = parseInt(m[4], 10);
+  if (!isFinite(f) || !isFinite(k)) return null;
+  const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+  return {
+    f: clamp(f, 0.005, 0.110),
+    k: clamp(k, 0.030, 0.075),
+    iters: clamp(iters, 1, 60),
+    palette: clamp(palette, 0, 5),
+  };
+}
+function applyHash() {
+  const s = decodeState(location.hash);
+  if (!s) return false;
+  Object.assign(params, s);
+  syncUI();
+  return true;
+}
+$("copylink").addEventListener("click", () => {
+  history.replaceState(null, "", encodeState());
+  navigator.clipboard.writeText(location.href).then(() => {
+    $("copylink").textContent = "Copied!";
+    setTimeout(() => { $("copylink").textContent = "Copy link"; }, 1200);
+  });
+});
 
 const presetBox = $("presets");
 PRESETS.forEach(p => {
@@ -298,9 +343,7 @@ PRESETS.forEach(p => {
   b.textContent = p.name;
   b.addEventListener("click", () => {
     params.f = p.f; params.k = p.k;
-    $("f").value = p.f; $("k").value = p.k;
-    $("fOut").textContent = p.f.toFixed(3);
-    $("kOut").textContent = p.k.toFixed(4);
+    syncUI();
     clearState(); scatter(6);
   });
   presetBox.appendChild(b);
@@ -386,10 +429,7 @@ if (fkCanvas && window.FkMap) {
     const y = Math.min(1, Math.max(0, 1 - (e.clientY - r.top) / r.height));
     const p = window.FkMap.toParams(x, y);
     params.f = p.f; params.k = p.k;
-    $("f").value = p.f; $("k").value = p.k;
-    $("fOut").textContent = p.f.toFixed(3);
-    $("kOut").textContent = p.k.toFixed(4);
-    drawFkMarker();
+    syncUI();
   });
 }
 
@@ -404,6 +444,10 @@ function frame() {
 }
 
 // bootstrap
+if (!applyHash()) {
+  // no valid shared state in the URL: start from defaults
+  syncUI();
+}
 clearState();
 scatter(6);
 frame();

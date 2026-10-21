@@ -10,6 +10,7 @@ Two virtual chemicals — a feed **A** and an activator **B** — diffuse across
 - **Tune F and k live** with sliders, or jump between 8 curated presets (coral, mitosis, worms, holes, flicker, bubbles, maze, solvons)
 - Control simulation speed (iterations per frame) and switch between 6 color palettes
 - **Save PNG** snapshots of the current pattern
+- **Copy link** to share the exact configuration (F, k, iterations, palette) via URL hash — opening a shared link restores it automatically
 - Keyboard: `Space` pause · `C` clear · `R` scatter seeds · `S` save
 
 The simulation uses ping-pong floating-point framebuffers, a 9-point Laplacian, and runs entirely in fragment shaders — steady 60 fps even at 60 iterations per frame.
